@@ -57,8 +57,8 @@
     </distributionManagement>
     <repositories>
         <repository>
-            <id>charset-6937</id>
-            <url>https://raw.githubusercontent.com/nomalab/java-charset/master/</url>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -75,9 +75,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>java-charset</groupId>
-            <artifactId>charset-6937</artifactId>
-            <version>1.0.2</version>
+            <groupId>com.github.nomalab</groupId>
+            <artifactId>java-charset</artifactId>
+            <version>v1.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
