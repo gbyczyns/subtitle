@@ -2,11 +2,11 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>fr.noop</groupId>
-    <artifactId>subtitle</artifactId>
-    <version>0.9.14-SNAPSHOT</version>
+    <groupId>com.gbyczyns</groupId>
+    <artifactId>subtitles-converter</artifactId>
+    <version>0.9.15</version>
     <packaging>jar</packaging>
-    <name>subtitle</name>
+    <name>subtitles-converter</name>
     <description>
         Convert subtitles from one format to another format.
         Supported formats: STL EBU, TTML SMI, VTT, SRT
@@ -43,6 +43,7 @@
         <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
         <timestamp>${maven.build.timestamp}</timestamp>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>8</maven.compiler.source>
     </properties>
 
     <distributionManagement>
@@ -115,7 +116,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>2.4</version>
+                <version>3.2.0</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -128,13 +129,16 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.3</version>
+                <version>3.1.1</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
                         <goals>
                             <goal>jar</goal>
                         </goals>
+                        <configuration>
+                            <source>${maven.compiler.source}</source>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -155,10 +159,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>3.8.1</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>8</source>
+                    <target>8</target>
                 </configuration>
             </plugin>
             <plugin>

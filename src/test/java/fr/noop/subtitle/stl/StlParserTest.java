@@ -33,7 +33,7 @@ public class StlParserTest {
 
     @Before
     public void setUp() throws Exception {
-        InputStream is = new FileInputStream("src/test/resources/stl/test.stl");
+        InputStream is = StlParserTest.class.getResourceAsStream("/stl/test.stl");
         StlParser stlParser = new StlParser();
         tested = stlParser.parse(is);
         testedGsi = tested.getGsi();

@@ -14,9 +14,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 
 import fr.noop.subtitle.model.SubtitleParser;
 import fr.noop.subtitle.model.SubtitleParsingException;
+import fr.noop.subtitle.util.BomUtils;
 import fr.noop.subtitle.util.SubtitlePlainText;
 import fr.noop.subtitle.util.SubtitleTextLine;
 import fr.noop.subtitle.util.SubtitleTimeCode;
@@ -33,12 +35,11 @@ public class SamiParser implements SubtitleParser {
         CUE_TEXT;
     }
 
-    private String charset; // Charset of the input files
+    private final Charset charset;
 
-    public SamiParser(String charset) {
+    public SamiParser(Charset charset) {
         this.charset = charset;
     }
-
 
     @Override
     public SamiObject parse(InputStream is) throws IOException, SubtitleParsingException {
@@ -56,6 +57,8 @@ public class SamiParser implements SubtitleParser {
         CursorStatus cursorStatus = CursorStatus.NONE;
         SamiCue cue = null;
         SamiCue previousCue = null;
+
+        BomUtils.skipByteOrderMark(br);
 
         while ((textLine = br.readLine()) != null) {
             textLine = textLine.trim();

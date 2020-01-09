@@ -19,9 +19,9 @@ import java.util.List;
  * Created by clebeaupin on 11/10/15.
  */
 public interface SubtitleCue {
-    public String getId();
-    public SubtitleTimeCode getStartTime();
-    public SubtitleTimeCode getEndTime();
-    public List<SubtitleLine> getLines();
-    public String getText();
+    String getId();
+    SubtitleTimeCode getStartTime();
+    SubtitleTimeCode getEndTime();
+    List<SubtitleLine> getLines();
+    String getText();
 }

@@ -14,9 +14,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.util.Objects;
 
 import fr.noop.subtitle.model.SubtitleParser;
 import fr.noop.subtitle.model.SubtitleParsingException;
+import fr.noop.subtitle.util.BomUtils;
 import fr.noop.subtitle.util.SubtitlePlainText;
 import fr.noop.subtitle.util.SubtitleTextLine;
 import fr.noop.subtitle.util.SubtitleTimeCode;
@@ -32,10 +35,10 @@ public class SrtParser implements SubtitleParser {
         CUE_TEXT;
     }
 
-    private String charset; // Charset of the input files
+    private final Charset charset;
 
-    public SrtParser(String charset) {
-        this.charset = charset;
+    public SrtParser(Charset charset) {
+        this.charset = Objects.requireNonNull(charset);
     }
 
     @Override
@@ -53,6 +56,8 @@ public class SrtParser implements SubtitleParser {
         String textLine = "";
         CursorStatus cursorStatus = CursorStatus.NONE;
         SrtCue cue = null;
+
+        BomUtils.skipByteOrderMark(br);
 
         while ((textLine = br.readLine()) != null) {
             textLine = textLine.trim();

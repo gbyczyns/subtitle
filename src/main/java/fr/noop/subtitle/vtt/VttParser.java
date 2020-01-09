@@ -14,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,9 +43,9 @@ public class VttParser implements SubtitleParser {
         CLOSE
     }
 
-    private String charset; // Charset of the input files
+    private final Charset charset;
 
-    public VttParser(String charset) {
+    public VttParser(Charset charset) {
         this.charset = charset;
     }
 
@@ -65,13 +66,10 @@ public class VttParser implements SubtitleParser {
         VttCue cue = null;
         String cueText = ""; // Text of the cue
 
+        BomUtils.skipByteOrderMark(br);
+
         while ((textLine = br.readLine()) != null) {
             textLine = textLine.trim();
-
-            // Remove BOM
-            if (cursorStatus == CursorStatus.NONE) {
-                textLine = StringUtils.removeBOM(textLine);
-            }
 
             // All Vtt files start with WEBVTT
             if (cursorStatus == CursorStatus.NONE && textLine.equals("WEBVTT")) {

@@ -1,5 +1,5 @@
-Subtitle library
-================
+Subtitles conversion library
+============================
 
 fr.noop.subtitle provides parsers and writers for different subtitle formats:
 

@@ -28,14 +28,18 @@ import java.awt.SystemColor;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 /**
  * Created by clebeaupin on 11/10/15.
  */
 public class VttWriter implements SubtitleWriter {
-    private String charset; // Charset used to encode file
 
-    public VttWriter(String charset) {
+    private static final String NEW_LINE = "\n";
+
+    private final Charset charset;
+
+    public VttWriter(Charset charset) {
         this.charset = charset;
     }
 
@@ -43,26 +47,28 @@ public class VttWriter implements SubtitleWriter {
     public void write(SubtitleObject subtitleObject, OutputStream os) throws IOException {
         try {
             // Write header
-            os.write(new String("WEBVTT\n\n").getBytes(this.charset));
+            os.write(("WEBVTT" + NEW_LINE + NEW_LINE).getBytes(this.charset));
 
             // Write cues
             for (SubtitleCue cue : subtitleObject.getCues()) {
                 if (cue.getId() != null) {
                     // Write number of subtitle
-                    String number = String.format("%s\n", cue.getId());
-                    os.write(number.getBytes(this.charset));
+                    os.write(cue.getId().getBytes(this.charset));
+                    os.write(NEW_LINE.getBytes(this.charset));
                 }
 
                 // Write Start time and end time
-                String startToEnd = String.format("%s --> %s %s\n",
-                        this.formatTimeCode(cue.getStartTime()),
-                        this.formatTimeCode(cue.getEndTime()),
-                        this.verticalPosition(cue));
-
+                String startToEnd = this.formatTimeCode(cue.getStartTime()) + " --> " + this.formatTimeCode(cue.getEndTime());
                 os.write(startToEnd.getBytes(this.charset));
-                // Write text
-                //String text = String.format("%s\n", cue.getText());
 
+                String verticalPosition = this.verticalPosition(cue);
+                if (verticalPosition != null) {
+                    os.write(" ".getBytes(this.charset));
+                    os.write(verticalPosition.getBytes(this.charset));
+                }
+                os.write(NEW_LINE.getBytes(this.charset));
+
+                // Write text
                 String text = "";
                 for (SubtitleLine line : cue.getLines()) {
                     for (SubtitleText inText : line.getTexts()) {
@@ -79,19 +85,19 @@ public class VttWriter implements SubtitleWriter {
                         } else {
                             text += inText.toString();
                         }
-                        text += "\n";
+                        text += NEW_LINE;
                     }
                 }
                 os.write(text.getBytes(this.charset));
 
                 // Write empty line
-                os.write("\n".getBytes(this.charset));
+                os.write(NEW_LINE.getBytes(this.charset));
 
                 // Get region
 
             }
         } catch (UnsupportedEncodingException e) {
-            throw new IOException("Encoding error in input subtitle");
+            throw new IOException(e.getMessage(), e);
         }
     }
 
@@ -101,12 +107,10 @@ public class VttWriter implements SubtitleWriter {
             if (va == VerticalAlign.TOP) {
                 return "line:0";
             }
-            else {
-                return "";
-            }
         }
-        return "";
+        return null;
     }
+
     private String formatTimeCode(SubtitleTimeCode timeCode) {
         return String.format("%02d:%02d:%02d.%03d",
                 timeCode.getHour(),

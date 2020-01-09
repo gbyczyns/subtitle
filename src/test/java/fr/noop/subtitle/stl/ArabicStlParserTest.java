@@ -33,7 +33,7 @@ public class ArabicStlParserTest {
 
     @Before
     public void setUp() throws Exception {
-        InputStream is = new FileInputStream("src/test/resources/stl/test_arabic.stl");
+        InputStream is = ArabicStlParserTest.class.getResourceAsStream("/stl/test_arabic.stl");
         StlParser stlParser = new StlParser();
         tested = stlParser.parse(is);
         testedGsi = tested.getGsi();

@@ -17,6 +17,6 @@ import java.io.InputStream;
  * Created by clebeaupin on 02/10/15.
  */
 public interface SubtitleParser {
-    public SubtitleObject parse(InputStream is) throws IOException, SubtitleParsingException;
-    public SubtitleObject parse(InputStream is, boolean strict) throws IOException, SubtitleParsingException;
+    SubtitleObject parse(InputStream is) throws IOException, SubtitleParsingException;
+    SubtitleObject parse(InputStream is, boolean strict) throws IOException, SubtitleParsingException;
 }

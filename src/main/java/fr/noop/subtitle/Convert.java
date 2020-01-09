@@ -19,6 +19,7 @@ import org.apache.commons.cli.*;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.*;
+import java.nio.charset.Charset;
 
 public class Convert {
     private Options options = new Options();
@@ -216,7 +217,7 @@ public class Convert {
             SubtitleParser subtitleParser = null;
 
             try {
-                subtitleParser = this.buildParser(inputFilePath, inputCharset);
+                subtitleParser = this.buildParser(inputFilePath, Charset.forName(inputCharset));
             } catch(IOException e) {
                 System.out.println(String.format("Unable to build parser for file %s: %s", inputFilePath, e.getMessage()));
                 System.exit(1);
@@ -249,7 +250,7 @@ public class Convert {
             SubtitleWriter writer = null;
 
             try {
-                writer = this.buildWriter(outputFilePath, outputCharset);
+                writer = this.buildWriter(outputFilePath, Charset.forName(outputCharset));
             } catch(IOException e) {
                 System.out.println(String.format("Unable to build writer for file %s: %s", outputFilePath, e.getMessage()));
                 System.exit(1);
@@ -279,7 +280,7 @@ public class Convert {
         }
     }
 
-    private SubtitleParser buildParser(String filePath, String charset) throws IOException {
+    private SubtitleParser buildParser(String filePath, Charset charset) throws IOException {
         String ext = this.getFileExtension(filePath);
 
         // Get subtitle parser class
@@ -291,7 +292,7 @@ public class Convert {
             Class<?> parserClass = Class.forName(convertParser.getClassName());
 
             if (convertParser.hasCharsetConstructor()) {
-                return (SubtitleParser) parserClass.getConstructor(String.class).newInstance(charset);
+                return (SubtitleParser) parserClass.getConstructor(Charset.class).newInstance(charset);
             } else {
                 return (SubtitleParser) parserClass.getConstructor().newInstance();
             }
@@ -300,7 +301,7 @@ public class Convert {
         }
     }
 
-    private SubtitleWriter buildWriter(String filePath, String charset) throws IOException {
+    private SubtitleWriter buildWriter(String filePath, Charset charset) throws IOException {
         String ext = this.getFileExtension(filePath);
 
         // Get subtitle writer class
@@ -312,7 +313,7 @@ public class Convert {
             Class<?> writerClass = Class.forName(convertWriter.getClassName());
 
             if (convertWriter.hasCharsetConstructor()) {
-                return (SubtitleWriter) writerClass.getConstructor(String.class).newInstance(charset);
+                return (SubtitleWriter) writerClass.getConstructor(Charset.class).newInstance(charset);
             } else {
                 return (SubtitleWriter) writerClass.getConstructor().newInstance();
             }
